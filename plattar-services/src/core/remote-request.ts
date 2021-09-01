@@ -10,25 +10,20 @@ export interface RequestPayload {
         quality: number,
         output: "usdz" | "glb",
         server: "production" | "staging" | "dev",
-        hash: string
+        hash?: string
     };
     data: any;
-}
-
-export abstract class BaseRequester {
-    public abstract get payload(): RequestPayload;
 }
 
 /**
  * This is used by the core types to perform remote requests
  */
 export class RemoteRequest {
-    public static request(requester: BaseRequester): Promise<RemoteResponse> {
+    public static request(payload: RequestPayload): Promise<RemoteResponse> {
         return new Promise<RemoteResponse>((accept, reject) => {
-            const payload: RequestPayload = requester.payload;
             const endpoint: string = payload.options.server === "dev" ? "http://localhost:9000/2015-03-31/functions/function/invocations" : "https://3gbnq7wuw2.execute-api.ap-southeast-2.amazonaws.com/main/xrutils";
 
-            const reqopts: RequestInit = {
+            const reqopts = {
                 method: "POST",
                 headers: {
                     'Accept': 'application/json',
