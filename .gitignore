@@ -1,0 +1,4 @@
+plattar-services/node_modules/
+plattar-services/dist/
+plattar-services/build/
+plattar-services/package-lock.json
