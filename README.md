@@ -47,7 +47,7 @@ configurator.output = "usdz";
 // execute on staging objects - default is production
 configurator.server = "staging";
 
-configurator.get().then((value) => {
+configurator.get().then((data) => {
     // this says if the object is returned from cache or generated new
     console.log("cache_status - " + data.cache_status);
     // this is the full url to the final generated object
