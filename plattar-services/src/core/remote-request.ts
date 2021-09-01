@@ -1,9 +1,5 @@
 import fetch from "node-fetch";
 
-export class RemoteResponse {
-    data: any;
-}
-
 export interface RequestPayload {
     options: {
         converter: "config_to_model",
@@ -19,8 +15,8 @@ export interface RequestPayload {
  * This is used by the core types to perform remote requests
  */
 export class RemoteRequest {
-    public static request(payload: RequestPayload): Promise<RemoteResponse> {
-        return new Promise<RemoteResponse>((accept, reject) => {
+    public static request(payload: RequestPayload): Promise<any> {
+        return new Promise<any>((accept, reject) => {
             const endpoint: string = payload.options.server === "dev" ? "http://localhost:9000/2015-03-31/functions/function/invocations" : "https://3gbnq7wuw2.execute-api.ap-southeast-2.amazonaws.com/main/xrutils";
 
             const reqopts = {
@@ -50,9 +46,7 @@ export class RemoteRequest {
                         reject(json);
                     }
                     else {
-                        accept({
-                            data: json
-                        });
+                        accept(json);
                     }
                 });
         });

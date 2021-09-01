@@ -1,6 +1,6 @@
 import { ProductVariation, SceneProduct } from "@plattar/plattar-api";
 import hash from "object-hash";
-import { RemoteRequest, RemoteResponse, RequestPayload } from "./remote-request";
+import { RemoteRequest, RequestPayload } from "./remote-request";
 
 export interface ConfiguratorMap {
     sceneproduct: string | null;
@@ -58,8 +58,8 @@ export class Configurator {
         throw new Error("Configurator.add() - mismatched instance types for inputs");
     }
 
-    public get(): Promise<RemoteResponse> {
-        return new Promise<RemoteResponse>((accept, reject) => {
+    public get(): Promise<any> {
+        return new Promise<any>((accept, reject) => {
             RemoteRequest.request(this._Payload).then(accept).catch(reject);
         });
     }

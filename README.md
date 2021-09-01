@@ -49,11 +49,11 @@ configurator.server = "staging";
 
 configurator.get().then((value) => {
     // this says if the object is returned from cache or generated new
-    console.log("cache_status - " + value.data.cache_status);
+    console.log("cache_status - " + data.cache_status);
     // this is the full url to the final generated object
-    console.log("filename - " + value.data.filename);
+    console.log("filename - " + data.filename);
     // this is the request/file hash used for caching
-    console.log("hash - " + value.data.hash);
+    console.log("hash - " + data.hash);
 }).catch((err) => {
     console.error(err);
 });
