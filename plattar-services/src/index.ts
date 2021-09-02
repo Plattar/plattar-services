@@ -1,4 +1,5 @@
 export { Configurator } from "./core/configurator";
+export { ModelConverter } from "./core/model-converter";
 export * as version from "./version";
 import version from "./version";
 

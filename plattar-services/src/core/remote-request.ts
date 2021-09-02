@@ -2,7 +2,7 @@ import fetch from "node-fetch";
 
 export interface RequestPayload {
     options: {
-        converter: "config_to_model",
+        converter: "config_to_model" | "gltf_to_model",
         quality: number,
         output: "usdz" | "glb",
         server: "production" | "staging" | "dev",

@@ -59,3 +59,27 @@ configurator.get().then((data) => {
 });
 
 ```
+
+### _Model Converter Example_
+
+```js
+const converter = new PlattarServices.ModelConverter();
+
+// the FileModel id, this can be a string or FileModel instance
+converter.model = "0d8c6d90-0b88-11ec-b58b-ffbce2e5da06";
+// output model as USDZ - default is glb
+converter.output = "usdz";
+// execute on staging objects - default is production
+converter.server = "staging";
+
+converter.get().then((data) => {
+    // this says if the object is returned from cache or generated new
+    console.log("cache_status - " + data.cache_status);
+    // this is the full url to the final generated object
+    console.log("filename - " + data.filename);
+    // this is the request/file hash used for caching
+    console.log("hash - " + data.hash);
+}).catch((err) => {
+    console.error(err);
+});
+```
