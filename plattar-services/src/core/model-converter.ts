@@ -9,6 +9,7 @@ export class ModelConverter {
     public quality: number = 100;
     public output: "usdz" | "glb" = "glb";
     public server: "production" | "staging" | "dev" = "production";
+    public retry: number = 0;
 
     constructor() {
         this._attrHash = [];
@@ -39,7 +40,7 @@ export class ModelConverter {
                 return reject(new Error("ModelConverter.get() - required .model attribute was not set"));
             }
 
-            RemoteRequest.request(this._Payload).then(accept).catch(reject);
+            RemoteRequest.request(this._Payload, (this.retry < 0 ? 0 : this.retry)).then(accept).catch(reject);
         });
     }
 

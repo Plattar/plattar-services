@@ -14,6 +14,7 @@ export class Configurator {
     public quality: number = 100;
     public output: "usdz" | "glb" = "glb";
     public server: "production" | "staging" | "dev" = "production";
+    public retry: number = 0;
 
     constructor() {
         this._maps = [];
@@ -60,7 +61,7 @@ export class Configurator {
 
     public get(): Promise<any> {
         return new Promise<any>((accept, reject) => {
-            RemoteRequest.request(this._Payload).then(accept).catch(reject);
+            RemoteRequest.request(this._Payload, (this.retry < 0 ? 0 : this.retry)).then(accept).catch(reject);
         });
     }
 
