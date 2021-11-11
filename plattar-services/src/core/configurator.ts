@@ -12,7 +12,7 @@ export class Configurator {
     private readonly _attrHash: string[];
 
     public quality: number = 100;
-    public output: "usdz" | "glb" = "glb";
+    public output: "usdz" | "glb" | "vto" = "glb";
     public server: "production" | "staging" | "dev" = "production";
     public retry: number = 0;
 
@@ -36,9 +36,6 @@ export class Configurator {
         };
 
         if ((sceneProduct instanceof SceneProduct) && (productVariation instanceof ProductVariation)) {
-            this._attrHash.push(hash.MD5(sceneProduct.attributes));
-            this._attrHash.push(hash.MD5(productVariation.attributes));
-
             map.sceneproduct = sceneProduct.id;
             map.productvariation = productVariation.id;
 
@@ -61,14 +58,42 @@ export class Configurator {
 
     public get(): Promise<any> {
         return new Promise<any>((accept, reject) => {
-            RemoteRequest.request(this._Payload, (this.retry < 0 ? 0 : this.retry)).then(accept).catch(reject);
+            this._CalculateHash().then(() => {
+                RemoteRequest.request(this._GetPayload(), (this.retry < 0 ? 0 : this.retry)).then(accept).catch(reject);
+            }).catch((_err) => {
+                reject(new Error("Configurator.get() - one of the objects does not exist in Plattar API"));
+            });
         });
     }
 
-    private get _Payload(): RequestPayload {
+    private _CalculateHash(): Promise<void> {
+        return new Promise<void>((accept, reject) => {
+            const promises: any[] = [];
+
+            this._maps.forEach((map) => {
+                if (map.productvariation !== null) {
+                    promises.push(new ProductVariation(map.productvariation).get());
+                }
+
+                if (map.sceneproduct !== null) {
+                    promises.push(new SceneProduct(map.sceneproduct).get());
+                }
+            });
+
+            Promise.all(promises).then((values: any[]) => {
+                values.forEach((value: any) => {
+                    this._attrHash.push(value.attributes);
+                });
+
+                accept();
+            }).catch(reject);
+        });
+    }
+
+    private _GetPayload(): RequestPayload {
         const load: RequestPayload = {
             options: {
-                converter: "config_to_model",
+                converter: this.output === "vto" ? "config_to_model" : "config_to_reality",
                 quality: this.quality,
                 output: this.output,
                 server: this.server

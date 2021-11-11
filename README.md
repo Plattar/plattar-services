@@ -57,7 +57,35 @@ configurator.get().then((data) => {
 }).catch((err) => {
     console.error(err);
 });
+```
 
+### _Virtual Try On (VTO) Example_
+
+```js
+const configurator = new PlattarServices.Configurator();
+
+// add SceneProduct and ProductVariation mapping to our configurator
+// if using plattar-api objects, the attributes will be hashed aswell
+configurator.add("bc136a6c-1abf-699b-f122-e72e43b32d2a", "e49e93a0-427f-11ec-acd9-9d5725e9cdf9");
+
+// output configuration as Apple Reality USDZ - default is glb
+// this model will track onto the users-face. The alignment 
+// can be changed via the Plattar CMS!
+configurator.output = "vto";
+
+// execute on staging objects - default is production
+configurator.server = "staging";
+
+configurator.get().then((data) => {
+    // this says if the object is returned from cache or generated new
+    console.log("cache_status - " + data.cache_status);
+    // this is the full url to the final generated object
+    console.log("filename - " + data.filename);
+    // this is the request/file hash used for caching
+    console.log("hash - " + data.hash);
+}).catch((err) => {
+    console.error(err);
+});
 ```
 
 ### _Model Converter Example_
