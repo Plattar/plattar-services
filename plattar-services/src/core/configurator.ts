@@ -93,14 +93,21 @@ export class Configurator {
                 Server.create(Server.match(oldOrigin));
 
                 accept();
-            }).catch(reject);
+            }).catch(() => {
+                // reset server back
+                Server.create(Server.match(oldOrigin));
+
+                reject(new Error("Configurator._CalculateHash() - unexpected error"));
+            });
         });
     }
 
     private _GetPayload(): RequestPayload {
+        const converter = this.output === "vto" ? "config_to_reality" : "config_to_model";
+
         const load: RequestPayload = {
             options: {
-                converter: (this.output === "vto" ? "config_to_model" : "config_to_reality"),
+                converter: converter,
                 quality: this.quality,
                 output: this.output,
                 server: this.server
