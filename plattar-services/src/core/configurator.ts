@@ -100,7 +100,7 @@ export class Configurator {
     private _GetPayload(): RequestPayload {
         const load: RequestPayload = {
             options: {
-                converter: this.output === "vto" ? "config_to_model" : "config_to_reality",
+                converter: (this.output === "vto" ? "config_to_model" : "config_to_reality"),
                 quality: this.quality,
                 output: this.output,
                 server: this.server
