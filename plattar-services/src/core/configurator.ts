@@ -1,4 +1,4 @@
-import { ProductVariation, SceneProduct } from "@plattar/plattar-api";
+import { ProductVariation, SceneProduct, Server } from "@plattar/plattar-api";
 import hash from "object-hash";
 import { RemoteRequest, RequestPayload } from "./remote-request";
 
@@ -70,6 +70,10 @@ export class Configurator {
         return new Promise<void>((accept, reject) => {
             const promises: any[] = [];
 
+            const oldOrigin: string = Server.default().originLocation.type;
+
+            Server.create(Server.match(this.server));
+
             this._maps.forEach((map) => {
                 if (map.productvariation !== null) {
                     promises.push(new ProductVariation(map.productvariation).get());
@@ -84,6 +88,9 @@ export class Configurator {
                 values.forEach((value: any) => {
                     this._attrHash.push(value.attributes);
                 });
+
+                // reset server back
+                Server.create(Server.match(oldOrigin));
 
                 accept();
             }).catch(reject);
