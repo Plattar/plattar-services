@@ -1,10 +1,11 @@
-import { ProductVariation, SceneProduct, Server } from "@plattar/plattar-api";
+import { ProductVariation, SceneModel, SceneProduct, Server } from "@plattar/plattar-api";
 import hash from "object-hash";
 import { RemoteRequest, RequestPayload } from "./remote-request";
 
 export interface ConfiguratorMap {
     sceneproduct: string | null;
-    productvariation: string | null
+    productvariation: string | null;
+    scenemodel: string | null;
 }
 
 export class Configurator {
@@ -22,17 +23,22 @@ export class Configurator {
     }
 
     public add(sceneProduct: SceneProduct | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
+        this.addProduct(sceneProduct, productVariation);
+    }
+
+    public addProduct(sceneProduct: SceneProduct | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
         if (!sceneProduct) {
-            throw new Error("Configurator.add() - sceneProduct input was null or undefined");
+            throw new Error("Configurator.addProduct() - sceneProduct input was null or undefined");
         }
 
         if (!productVariation) {
-            throw new Error("Configurator.add() - productVariation input was null or undefined");
+            throw new Error("Configurator.addProduct() - productVariation input was null or undefined");
         }
 
         const map: ConfiguratorMap = {
             sceneproduct: null,
-            productvariation: null
+            productvariation: null,
+            scenemodel: null
         };
 
         if ((sceneProduct instanceof SceneProduct) && (productVariation instanceof ProductVariation)) {
@@ -53,7 +59,37 @@ export class Configurator {
             return;
         }
 
-        throw new Error("Configurator.add() - mismatched instance types for inputs");
+        throw new Error("Configurator.addProduct() - mismatched instance types for inputs");
+    }
+
+    public addModel(sceneModel: SceneModel | string | undefined | null = null): void {
+        if (!sceneModel) {
+            throw new Error("Configurator.addModel() - sceneModel input was null or undefined");
+        }
+
+        const map: ConfiguratorMap = {
+            sceneproduct: null,
+            productvariation: null,
+            scenemodel: null
+        };
+
+        if (sceneModel instanceof SceneModel) {
+            map.scenemodel = sceneModel.id;
+
+            this._maps.push(map);
+
+            return;
+        }
+
+        if (typeof sceneModel === "string") {
+            map.scenemodel = <string>sceneModel;
+
+            this._maps.push(map);
+
+            return;
+        }
+
+        throw new Error("Configurator.addModel() - mismatched instance types for inputs");
     }
 
     public get(): Promise<any> {
@@ -81,6 +117,10 @@ export class Configurator {
 
                 if (map.sceneproduct !== null) {
                     promises.push(new SceneProduct(map.sceneproduct).get());
+                }
+
+                if (map.scenemodel !== null) {
+                    promises.push(new SceneModel(map.scenemodel).get());
                 }
             });
 
