@@ -37,9 +37,11 @@ const configurator = new PlattarServices.Configurator();
 
 // add SceneProduct and ProductVariation mapping to our configurator
 // if using plattar-api objects, the attributes will be hashed aswell
-configurator.add("4e00bed9-27a2-182b-f4fa-05a5fdebf351", "568b63d0-3af6-11e9-8543-4d96b548a86f");
-configurator.add("a4864c9d-399a-dc56-85fa-f4eea5aedd8c", "c8bc3d40-3af6-11e9-8e4f-fb10e27e3a41");
-configurator.add("3bf0c608-731e-ebde-5081-b99de03e14ff", "1bf213e0-3af7-11e9-bb39-dbde969e139c");
+configurator.addProduct("e6d79450-4e5a-11ec-8441-19fd21954ae9", "568b63d0-3af6-11e9-8543-4d96b548a86f");
+configurator.addProduct("e6d890b0-4e5a-11ec-b6da-dfb7e6b01d2b", "c8bc3d40-3af6-11e9-8e4f-fb10e27e3a41");
+configurator.addProduct("e6d66ae0-4e5a-11ec-94a1-cf20ab6b8fd4", "1bf213e0-3af7-11e9-bb39-dbde969e139c");
+// configurator also aupports adding models without variations
+configurator.addModel("15e26685-fdda-806c-bd62-70f57594ea38");
 
 // output configuration as USDZ - default is glb
 configurator.output = "usdz";
@@ -66,7 +68,7 @@ const configurator = new PlattarServices.Configurator();
 
 // add SceneProduct and ProductVariation mapping to our configurator
 // if using plattar-api objects, the attributes will be hashed aswell
-configurator.add("bc136a6c-1abf-699b-f122-e72e43b32d2a", "e49e93a0-427f-11ec-acd9-9d5725e9cdf9");
+configurator.addProduct("bc136a6c-1abf-699b-f122-e72e43b32d2a", "e49e93a0-427f-11ec-acd9-9d5725e9cdf9");
 
 // output configuration as Apple Reality USDZ - default is glb
 // this model will track onto the users-face. The alignment 
