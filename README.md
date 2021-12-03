@@ -37,9 +37,9 @@ const configurator = new PlattarServices.Configurator();
 
 // add SceneProduct and ProductVariation mapping to our configurator
 // if using plattar-api objects, the attributes will be hashed aswell
-configurator.addProduct("e6d79450-4e5a-11ec-8441-19fd21954ae9", "568b63d0-3af6-11e9-8543-4d96b548a86f");
-configurator.addProduct("e6d890b0-4e5a-11ec-b6da-dfb7e6b01d2b", "c8bc3d40-3af6-11e9-8e4f-fb10e27e3a41");
-configurator.addProduct("e6d66ae0-4e5a-11ec-94a1-cf20ab6b8fd4", "1bf213e0-3af7-11e9-bb39-dbde969e139c");
+configurator.addSceneProduct("e6d79450-4e5a-11ec-8441-19fd21954ae9", "568b63d0-3af6-11e9-8543-4d96b548a86f");
+configurator.addSceneProduct("e6d890b0-4e5a-11ec-b6da-dfb7e6b01d2b", "c8bc3d40-3af6-11e9-8e4f-fb10e27e3a41");
+configurator.addSceneProduct("e6d66ae0-4e5a-11ec-94a1-cf20ab6b8fd4", "1bf213e0-3af7-11e9-bb39-dbde969e139c");
 // configurator also aupports adding models without variations
 configurator.addModel("15e26685-fdda-806c-bd62-70f57594ea38");
 

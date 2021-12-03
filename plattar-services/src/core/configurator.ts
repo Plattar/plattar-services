@@ -1,11 +1,12 @@
-import { ProductVariation, SceneModel, SceneProduct, Server } from "@plattar/plattar-api";
+import { Product, ProductVariation, SceneModel, SceneProduct, Server } from "@plattar/plattar-api";
 import hash from "object-hash";
 import { RemoteRequest, RequestPayload } from "./remote-request";
 
 export interface ConfiguratorMap {
-    sceneproduct: string | null;
-    productvariation: string | null;
-    scenemodel: string | null;
+    sceneproduct?: string | null;
+    product?: string | null;
+    productvariation?: string | null;
+    scenemodel?: string | null;
 }
 
 export class Configurator {
@@ -23,22 +24,21 @@ export class Configurator {
     }
 
     public add(sceneProduct: SceneProduct | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
-        this.addProduct(sceneProduct, productVariation);
+        this.addSceneProduct(sceneProduct, productVariation);
     }
 
-    public addProduct(sceneProduct: SceneProduct | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
+    public addSceneProduct(sceneProduct: SceneProduct | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
         if (!sceneProduct) {
-            throw new Error("Configurator.addProduct() - sceneProduct input was null or undefined");
+            throw new Error("Configurator.addSceneProduct() - sceneProduct input was null or undefined");
         }
 
         if (!productVariation) {
-            throw new Error("Configurator.addProduct() - productVariation input was null or undefined");
+            throw new Error("Configurator.addSceneProduct() - productVariation input was null or undefined");
         }
 
         const map: ConfiguratorMap = {
             sceneproduct: null,
-            productvariation: null,
-            scenemodel: null
+            productvariation: null
         };
 
         if ((sceneProduct instanceof SceneProduct) && (productVariation instanceof ProductVariation)) {
@@ -59,6 +59,41 @@ export class Configurator {
             return;
         }
 
+        throw new Error("Configurator.addSceneProduct() - mismatched instance types for inputs");
+    }
+
+    public addProduct(product: Product | string | undefined | null = null, productVariation: ProductVariation | string | undefined | null = null): void {
+        if (!product) {
+            throw new Error("Configurator.addProduct() - product input was null or undefined");
+        }
+
+        if (!productVariation) {
+            throw new Error("Configurator.addProduct() - productVariation input was null or undefined");
+        }
+
+        const map: ConfiguratorMap = {
+            productvariation: null,
+            product: null
+        };
+
+        if ((product instanceof Product) && (productVariation instanceof ProductVariation)) {
+            map.product = product.id;
+            map.productvariation = productVariation.id;
+
+            this._maps.push(map);
+
+            return;
+        }
+
+        if ((typeof product === "string" || product instanceof String) && (typeof productVariation === "string" || productVariation instanceof String)) {
+            map.product = <string>product;
+            map.productvariation = <string>productVariation;
+
+            this._maps.push(map);
+
+            return;
+        }
+
         throw new Error("Configurator.addProduct() - mismatched instance types for inputs");
     }
 
@@ -68,8 +103,6 @@ export class Configurator {
         }
 
         const map: ConfiguratorMap = {
-            sceneproduct: null,
-            productvariation: null,
             scenemodel: null
         };
 
@@ -111,16 +144,20 @@ export class Configurator {
             Server.create(Server.match(this.server));
 
             this._maps.forEach((map) => {
-                if (map.productvariation !== null) {
+                if (map.productvariation) {
                     promises.push(new ProductVariation(map.productvariation).get());
                 }
 
-                if (map.sceneproduct !== null) {
+                if (map.sceneproduct) {
                     promises.push(new SceneProduct(map.sceneproduct).get());
                 }
 
-                if (map.scenemodel !== null) {
+                if (map.scenemodel) {
                     promises.push(new SceneModel(map.scenemodel).get());
+                }
+
+                if (map.product) {
+                    promises.push(new Product(map.product).get());
                 }
             });
 
