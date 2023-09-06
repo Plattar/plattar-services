@@ -15,7 +15,7 @@ export class Configurator {
 
     public quality: number = 100;
     public output: "usdz" | "glb" | "vto" = "glb";
-    public server: "production" | "staging" | "dev" = "production";
+    public server: "production" | "staging" | "review" | "dev" = "production";
     public retry: number = 0;
 
     constructor() {

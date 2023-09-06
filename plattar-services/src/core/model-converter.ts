@@ -8,7 +8,7 @@ export class ModelConverter {
     private _model: string | null = null;
     public quality: number = 100;
     public output: "usdz" | "glb" = "glb";
-    public server: "production" | "staging" | "dev" = "production";
+    public server: "production" | "staging" | "review" | "dev" = "production";
     public retry: number = 0;
 
     constructor() {
