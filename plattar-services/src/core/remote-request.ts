@@ -11,12 +11,19 @@ export interface RequestPayload {
     data: any;
 }
 
+export interface ConversionResponse {
+    readonly filename: string;
+    readonly hash: string;
+    readonly cache_status: boolean;
+    readonly server_version: string;
+}
+
 /**
  * This is used by the core types to perform remote requests
  */
 export class RemoteRequest {
-    public static request(payload: RequestPayload, retry: number = 0): Promise<any> {
-        return new Promise<any>((accept, reject) => {
+    public static request(payload: RequestPayload, retry: number = 0): Promise<ConversionResponse> {
+        return new Promise<ConversionResponse>((accept, reject) => {
             if (retry >= 0) {
                 RemoteRequest._send(payload).then(accept).catch((err) => {
                     const newretry: number = retry - 1;
@@ -39,7 +46,7 @@ export class RemoteRequest {
         });
     }
 
-    private static _send(payload: RequestPayload): Promise<any> {
+    private static _send(payload: RequestPayload): Promise<ConversionResponse> {
         return new Promise<any>((accept, reject) => {
             const endpoint: string = payload.options.server === "dev" ? "http://localhost:9000/2015-03-31/functions/function/invocations" : "https://3gbnq7wuw2.execute-api.ap-southeast-2.amazonaws.com/main/xrutils";
 
