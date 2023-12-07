@@ -1,6 +1,6 @@
 import { Product, ProductVariation, SceneModel, SceneProduct, Server } from "@plattar/plattar-api";
 import hash from "object-hash";
-import { RemoteRequest, RequestPayload } from "./remote-request";
+import { ConversionResponse, RemoteRequest, RequestPayload } from "./remote-request";
 
 export interface ConfiguratorMap {
     sceneproduct?: string | null;
@@ -15,7 +15,7 @@ export class Configurator {
 
     public quality: number = 100;
     public output: "usdz" | "glb" | "vto" = "glb";
-    public server: "production" | "staging" | "dev" = "production";
+    public server: "production" | "staging" | "review" | "dev" = "production";
     public retry: number = 0;
 
     constructor() {
@@ -125,8 +125,8 @@ export class Configurator {
         throw new Error("Configurator.addModel() - mismatched instance types for inputs");
     }
 
-    public get(): Promise<any> {
-        return new Promise<any>((accept, reject) => {
+    public get(): Promise<ConversionResponse> {
+        return new Promise<ConversionResponse>((accept, reject) => {
             this._CalculateHash().then(() => {
                 RemoteRequest.request(this._GetPayload(), (this.retry < 0 ? 0 : this.retry)).then(accept).catch(reject);
             }).catch((_err) => {

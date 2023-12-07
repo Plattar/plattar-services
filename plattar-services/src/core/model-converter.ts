@@ -1,6 +1,6 @@
 import { FileModel } from "@plattar/plattar-api";
 import hash from "object-hash";
-import { RemoteRequest, RequestPayload } from "./remote-request";
+import { ConversionResponse, RemoteRequest, RequestPayload } from "./remote-request";
 
 export class ModelConverter {
     private readonly _attrHash: string[];
@@ -8,7 +8,7 @@ export class ModelConverter {
     private _model: string | null = null;
     public quality: number = 100;
     public output: "usdz" | "glb" = "glb";
-    public server: "production" | "staging" | "dev" = "production";
+    public server: "production" | "staging" | "review" | "dev" = "production";
     public retry: number = 0;
 
     constructor() {
@@ -34,8 +34,8 @@ export class ModelConverter {
         this._model = newModel;
     }
 
-    public get(): Promise<any> {
-        return new Promise<any>((accept, reject) => {
+    public get(): Promise<ConversionResponse> {
+        return new Promise<ConversionResponse>((accept, reject) => {
             if (!this._model) {
                 return reject(new Error("ModelConverter.get() - required .model attribute was not set"));
             }
