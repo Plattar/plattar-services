@@ -37,7 +37,7 @@
   },
   "homepage": "https://www.plattar.com",
   "dependencies": {
-    "@plattar/plattar-api": "^1.154.1",
+    "@plattar/plattar-api": "^1.186.3",
     "node-fetch": "^2.6.1",
     "object-hash": "^3.0.0"
   },
