@@ -1,5 +1,3 @@
-import fetch from "node-fetch";
-
 export interface RequestPayload {
     options: {
         converter: "config_to_model" | "gltf_to_model" | "config_to_reality",
@@ -60,7 +58,7 @@ export class RemoteRequest {
             };
 
             fetch(endpoint, reqopts)
-                .then((res) => {
+                .then((res: Response) => {
                     if (res.ok) {
                         try {
                             return res.json();
